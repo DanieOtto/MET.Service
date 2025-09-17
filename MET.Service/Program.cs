@@ -8,7 +8,7 @@ builder.Services.AddHostedService<Worker>();
 // C#
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("Sql"),
+        builder.Configuration.GetConnectionString("DefaultConnection"),
         sql =>
         {
             sql.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);

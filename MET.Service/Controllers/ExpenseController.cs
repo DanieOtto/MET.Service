@@ -1,6 +1,10 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace MET.Service.Controllers;
 
-public class ExpenseController
+[ApiController]
+[Route("expenses")]
+public class ExpenseController : Controller
 {
-    
+        
 }
