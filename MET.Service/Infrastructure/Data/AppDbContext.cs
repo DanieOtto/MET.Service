@@ -4,10 +4,8 @@ using Microsoft.EntityFrameworkCore;
 namespace MET.Service.Infrastructure.Data;
 
 // C#
-public class AppDbContext : DbContext
+public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
     public DbSet<Expense> Expenses => Set<Expense>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
