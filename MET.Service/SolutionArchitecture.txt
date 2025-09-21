@@ -1,0 +1,25 @@
+MyApi/
+│
+├── Controllers/                  --> API endpoints
+│   └── UsersController.cs
+│
+├── Application/                  --> Business/application logic
+│   ├── Interfaces/               --> Abstractions (e.g., IUserRepository)
+│   ├── Services/                 --> Business services (CRUD logic, validation)
+│   └── DTOs/                     --> Data Transfer Objects (for requests/responses)
+│
+├── Domain/                       --> Core entities + rules
+│   ├── Entities/                 --> User.cs, Product.cs, etc.
+│   ├── ValueObjects/             --> Email.cs, Money.cs, etc.
+│   └── Enums/                    --> Status enums, etc.
+│
+├── Infrastructure/               --> Persistence + external integrations
+│   ├── Data/                     --> EF Core DbContext, Migrations
+│   ├── Repositories/             --> Repo implementations (UserRepository.cs)
+│   └── Services/                 --> External API clients (if any)
+│
+├── Middleware/                   --> Custom exception handling, logging, etc.
+│
+├── Program.cs                    --> Minimal API/Host setup
+├── appsettings.json
+└── MyApi.csproj
