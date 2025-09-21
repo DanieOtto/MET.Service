@@ -1,9 +1,8 @@
-using MET.Service;
+using MET.Service.Infrastructure;
 using MET.Service.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-var builder = Host.CreateApplicationBuilder(args);
-builder.Services.AddHostedService<Worker>();
+var builder = WebApplication.CreateBuilder(args);
 
 // C#
 builder.Services.AddDbContext<AppDbContext>(options =>

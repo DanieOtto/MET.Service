@@ -1,5 +1,6 @@
 using MET.Service.Application.Interfaces;
 using MET.Service.Domain.Entities;
+using MET.Service.Infrastructure;
 using MET.Service.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
