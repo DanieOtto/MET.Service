@@ -4,9 +4,9 @@ namespace MET.Service.Application.Interfaces;
 
 public interface IExpenseService
 {
-    Task<Expense> GetByIdAsync(Guid id);
-    Task<List<Expense>> GetAllAsync();
-    Task AddAsync(Expense expense);
-    Task UpdateAsync(Expense expense);
-    Task DeleteAsync(Guid id);
+    Task<Expense> GetAsync(Guid id, CancellationToken ct = default);
+    Task<List<Expense>> ListAsync(CancellationToken ct = default);
+    Task<Expense> CreateAsync(Expense expense, CancellationToken ct = default);
+    Task<Expense> UpdateAsync(Expense expense, CancellationToken ct = default);
+    Task DeleteAsync(Guid id, CancellationToken ct = default);
 }

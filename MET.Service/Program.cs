@@ -1,10 +1,11 @@
-using MET.Service.Infrastructure;
+using MET.Service.Application.Interfaces;
+using MET.Service.Application.Services;
 using MET.Service.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // C#
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
