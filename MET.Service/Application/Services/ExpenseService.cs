@@ -1,3 +1,4 @@
+using MET.Service.Application.DTOs;
 using MET.Service.Application.Interfaces;
 using MET.Service.Domain.Entities;
 using MET.Service.Infrastructure.Data;
@@ -19,13 +20,19 @@ public class ExpenseService(AppDbContext context) : IExpenseService
         return expense;
     }
     
-    public async Task<List<Expense>> ListAsync(CancellationToken ct = default)
+    public async Task<List<Expense>> ListAsync(int skip, int take, CancellationToken ct = default)
     {
-        return await context.Set<Expense>()
+        return await context.Set<Expense>().Skip(skip).Take(take)
             .AsNoTracking()
             .ToListAsync(ct);
     }
 
+    // TODO: Create Summary Report
+    public async Task<List<ExpenseSummaryDto>> CreateSummaryReport(Guid id, CancellationToken ct = default)
+    {
+        return new List<ExpenseSummaryDto>();
+    }
+    
     public async Task<Expense> CreateAsync(Expense expense, CancellationToken ct = default)
     {
         context.Set<Expense>().Add(expense);
