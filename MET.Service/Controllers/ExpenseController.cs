@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MET.Service.Controllers;
 
 [ApiController]
-[Route("api/expenses")]
+[Route("api/v1/expenses")]
 public class ExpenseController(IExpenseService service) : ControllerBase
 {
         // GET /api/expenses/{id}
