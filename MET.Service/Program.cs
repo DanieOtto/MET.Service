@@ -2,8 +2,11 @@ using MET.Service.Application.Interfaces;
 using MET.Service.Application.Services;
 using MET.Service.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -15,14 +18,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
             sql.CommandTimeout(60);
         }));
 
-builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.Run();
