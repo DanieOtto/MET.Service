@@ -2,7 +2,6 @@ using MET.Service.Application.Interfaces;
 using MET.Service.Application.Services;
 using MET.Service.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,12 +17,18 @@ builder.Services.AddDbContext<AppDbContext>(options =>
             sql.CommandTimeout(60);
         }));
 
+builder.Services.AddControllers();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "MET API V1");
+    });
 }
 
 app.Run();

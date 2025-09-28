@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace MET.Service.Controllers;
 
 [ApiController]
-[Route("api/v1/expenses")]
+[Route("api/expenses")]
 public class ExpenseController(IExpenseService service) : ControllerBase
 {
         // GET /api/expenses/{id}
@@ -30,11 +30,11 @@ public class ExpenseController(IExpenseService service) : ControllerBase
         
         // CREATE /api/expenses
         [HttpPost]
-        public async Task<Expense> CreateAsync(Expense expense, CancellationToken ct = default)
+        public async Task<ActionResult<Expense>> CreateAsync([FromBody] Expense expense, CancellationToken ct = default)
         {
-                var result = await service.CreateAsync(expense, ct);
-
-                return result;
+                if (!ModelState.IsValid) return BadRequest(ModelState);
+                var created = await service.CreateAsync(expense, ct);
+                return CreatedAtRoute("GetExpenseById", new { id = created.Id }, created);
         }
 
         // UPDATE /api/expenses
@@ -46,8 +46,7 @@ public class ExpenseController(IExpenseService service) : ControllerBase
         }
 
         // GET /api/expenses/summary/{id}
-        [Route("summary")]
-        [HttpGet("{id:guid}", Name = "GetExpenseSummaryById")]
+        [HttpGet("summary/{id:guid}", Name = "GetExpenseSummaryById")]
         public async Task<ActionResult<ExpenseSummaryDto>> GetSummary([FromRoute] Guid id, CancellationToken ct = default)
         {
                 var result = await service.CreateSummaryReport(id, ct);
@@ -56,8 +55,9 @@ public class ExpenseController(IExpenseService service) : ControllerBase
         
         // DELETE /api/expenses/{id}
         [HttpDelete("{id:guid}")]
-        public async Task DeleteAsync(Guid id, CancellationToken ct = default)
+        public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken ct = default)
         {
                 await service.DeleteAsync(id, ct);
+                return NoContent();
         }
 }
