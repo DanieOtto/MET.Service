@@ -4,7 +4,9 @@ using MET.Service.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-// C#
+
+builder.Services.AddOpenApi();
+
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
@@ -15,5 +17,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
             sql.CommandTimeout(60);
         }));
 
-var host = builder.Build();
-host.Run();
+builder.Services.AddControllers();
+
+var app = builder.Build();
+
+app.MapControllers();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "MET API V1");
+    });
+}
+
+app.Run();
