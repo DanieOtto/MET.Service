@@ -1,5 +1,5 @@
 using MET.Service.Application.DTOs;
-using MET.Service.Application.DTOs.Utilities;
+using MET.Service.Application.DTOs.Paging;
 using MET.Service.Application.Interfaces;
 using MET.Service.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;

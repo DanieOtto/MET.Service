@@ -1,4 +1,4 @@
-namespace MET.Service.Application.DTOs.Utilities;
+namespace MET.Service.Application.DTOs.Paging;
 
 public sealed record PagedList<T>(
     List<T> Items,
