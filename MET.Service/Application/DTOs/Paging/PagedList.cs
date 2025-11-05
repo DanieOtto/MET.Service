@@ -12,7 +12,9 @@ public sealed record PagedList<T>(
 }
 
 public sealed record PageQuery(int PageNumber = 1, int PageSize = 50)
+
 {
     public int Skip => (PageNumber - 1) * PageSize;
+    
     public int Take => PageSize;
 }

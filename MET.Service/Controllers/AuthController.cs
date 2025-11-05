@@ -1,5 +1,6 @@
 using MET.Service.Application.DTOs;
 using MET.Service.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MET.Service.Controllers;
@@ -8,20 +9,21 @@ namespace MET.Service.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly IJwtTokenService _jwtService;
+    private readonly ITokenService _tokenService;
     
-    public AuthController(IJwtTokenService jwtService)
+    public AuthController(ITokenService tokenService)
     {
-        _jwtService = jwtService;
+        _tokenService = tokenService;
     }
     
+    [AllowAnonymous]
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginRequest model)
     {
         if (!String.IsNullOrEmpty(model.Username) && !String.IsNullOrEmpty(model.Password))
         {
-            var token = _jwtService.GenerateToken(model.Username, "1");
-            return Ok(new { token });
+            var result = _tokenService.Create(model);
+            return Ok(new { result });
         }
         return Unauthorized();
     }
