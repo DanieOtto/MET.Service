@@ -10,8 +10,7 @@ using MET.Service.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Secret key for signing JWTs
-var jwtSecret = builder.Configuration["Jwt:Key"] ?? "tempKey";
+var config = builder.Configuration;
 
 // Add authentication services
 builder.Services.AddAuthentication(options =>
@@ -25,9 +24,10 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"]
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!)),
+            ValidIssuer = config["Jwt:Issuer"],
+            ValidAudience = config["Jwt:Audience"]
         };
     });
 
@@ -45,7 +45,6 @@ builder.Services.AddOpenApi();
 // Add application services
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddSingleton(new TokenService(jwtSecret));
 builder.Services.AddScoped<ITokenService, TokenService>();
 
 // Add database context
@@ -63,6 +62,9 @@ builder.Services.AddControllers();
 
 // Configure Middlewares
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthentication();
 
 // Configure the HTTP request pipeline.
 app.MapControllers();

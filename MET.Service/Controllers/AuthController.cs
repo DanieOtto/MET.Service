@@ -7,23 +7,23 @@ namespace MET.Service.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController : ControllerBase
+public class AuthController(ITokenService _tokenService, IUserService _userService) : ControllerBase
 {
-    private readonly ITokenService _tokenService;
-    
-    public AuthController(ITokenService tokenService)
-    {
-        _tokenService = tokenService;
-    }
-    
     [AllowAnonymous]
     [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginRequest model)
+    public IActionResult Login([FromBody] LoginRequest request)
     {
-        if (!String.IsNullOrEmpty(model.Username) && !String.IsNullOrEmpty(model.Password))
+        if (!String.IsNullOrEmpty(request.Username) && !String.IsNullOrEmpty(request.Password))
         {
-            var result = _tokenService.Create(model);
-            return Ok(new { result });
+            var user = _userService.GetAsync(request.Id);
+
+            // TODO: Add extra validation
+            if (user != null)
+            {
+                var result = _tokenService.Create(request);
+                return Ok(new { result });    
+            }
+
         }
         return Unauthorized();
     }
