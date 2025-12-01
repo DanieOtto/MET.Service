@@ -1,5 +1,81 @@
-bin/
-obj/
-/packages/
-riderModule.iml
-/_ReSharper.Caches/
+# .gitignore for a .NET 10 Web Service (Visual Studio / VS Code / Rider)
+
+# Build outputs
+[Bb]in/
+[Oo]bj/
+out/
+artifacts/
+buildhost-*/
+buildhost-netcore/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific project files
+*.user
+*.userprefs
+
+# Visual Studio Code
+.vscode/
+
+# JetBrains Rider / IntelliJ
+.idea/
+*.sln.iml
+*.iml
+
+# NuGet and package artifacts
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# Publish and deployment outputs
+publish/
+publish_output/
+*.Publish.xml
+
+# ASP.NET and dotnet tool/state files
+Properties/launchSettings.json
+secrets.json
+**/secrets.json
+appsettings.*.Local.json
+
+# EF / Local DB
+*.mdf
+*.ldf
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+
+# Test results / coverage
+TestResults/
+*.trx
+coverage/
+*.coverage
+*.coveragexml
+coverage.opencover.xml
+coverage.json
+
+# Generated files
+*.g.cs
+*.g.i.cs
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Logs and temp
+*.log
+logs/
+tmp/
+temp/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
