@@ -17,13 +17,11 @@ public class AuthController(ITokenService _tokenService, IUserService _userServi
         {
             var user = _userService.GetAsync(request.Id);
 
-            // TODO: Add extra validation
-            if (user != null)
+            if (user == null)
             {
                 var result = _tokenService.Create(request);
                 return Ok(new { result });    
             }
-
         }
         return Unauthorized();
     }

@@ -9,14 +9,14 @@ public class UserService(AppDbContext context) : IUserService
 {
     public async Task<User> GetAsync(Guid id, CancellationToken ct = default)
     {
-        var expense = await context.Set<User>()
+        var user = await context.Set<User>()
             .AsNoTracking()
             .FirstOrDefaultAsync(e => e.Id == id, ct);
 
-        if (expense is null)
+        if (user is null)
             throw new KeyNotFoundException($"User {id} not found.");
 
-        return expense;
+        return user;
     }
     
     public async Task<List<User>> ListAsync(int skip, int take, CancellationToken ct = default)

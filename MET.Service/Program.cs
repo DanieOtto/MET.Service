@@ -32,12 +32,7 @@ builder.Services.AddAuthentication(options =>
     });
 
 // Add authorization services
-builder.Services.AddAuthorization(options =>
-{
-    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-});
+builder.Services.AddAuthorization();
 
 // Add Swagger
 builder.Services.AddOpenApi();
