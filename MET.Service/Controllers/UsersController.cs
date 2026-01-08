@@ -29,16 +29,7 @@ public class UsersController(IUserService service) : ControllerBase
                 var total = items.Count;
                 return Ok(new PagedList<User>(items, query.PageNumber, query.PageSize, total));
         }
-        
-        // CREATE /api/users
-        [HttpPost]
-        public async Task<ActionResult<User>> CreateAsync([FromBody] User user, CancellationToken ct = default)
-        {
-                if (!ModelState.IsValid) return BadRequest(ModelState);
-                var created = await service.CreateAsync(user, ct);
-                return CreatedAtRoute("GetUserById", new { id = created.Id }, created);
-        }
-
+    
         // UPDATE /api/users
         [HttpPatch]
         public async Task<User> UpdateAsync(User user, CancellationToken ct = default)

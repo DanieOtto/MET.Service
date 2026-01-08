@@ -1,5 +1,6 @@
 using MET.Service.Application.DTOs;
 using MET.Service.Application.Interfaces;
+using MET.Service.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,18 +12,44 @@ public class AuthController(ITokenService _tokenService, IUserService _userServi
 {
     [AllowAnonymous]
     [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         if (!String.IsNullOrEmpty(request.Username) && !String.IsNullOrEmpty(request.Password))
         {
-            var user = _userService.GetAsync(request.Id);
+            var user = await _userService.GetAsync(request.Id);
 
-            if (user == null)
+            if (user != null)
             {
                 var result = _tokenService.Create(request);
-                return Ok(new { result });    
+                return Ok(new { result });
             }
         }
+        return Unauthorized();
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+    {
+        if (String.IsNullOrEmpty(request.Username) || String.IsNullOrEmpty(request.Password))
+        {
+            return BadRequest();
+        }
+
+        var result = await _userService.CreateAsync(request);
+
+        if (result != null)
+        {
+            var token = _tokenService.Create(new LoginRequest 
+            { 
+                Id = result.Id,
+                Password = request.Password!,
+                Roles = request.Roles,
+                Scopes = request.Scopes,
+                Username = request.Username!
+            });
+            return Ok(new { token });
+        }
+
         return Unauthorized();
     }
 }
