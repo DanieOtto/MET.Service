@@ -1,3 +1,4 @@
+using MET.Service.Application.DTOs;
 using MET.Service.Application.Interfaces;
 using MET.Service.Domain.Entities;
 using MET.Service.Infrastructure.Data;
@@ -13,9 +14,6 @@ public class UserService(AppDbContext context) : IUserService
             .AsNoTracking()
             .FirstOrDefaultAsync(e => e.Id == id, ct);
 
-        if (user is null)
-            throw new KeyNotFoundException($"User {id} not found.");
-
         return user;
     }
     
@@ -26,11 +24,28 @@ public class UserService(AppDbContext context) : IUserService
             .ToListAsync(ct);
     }
 
-    public async Task<User> CreateAsync(User user, CancellationToken ct = default)
+    public async Task<User> CreateAsync(RegisterRequestDto request, CancellationToken ct = default)
     {
-        context.Set<User>().Add(user);
+        // Check for existing user with same email
+        var existingUser = await context.Set<User>()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Email == request.Email, ct);    
+
+        if (existingUser != null)
+        {
+            // Handle user already exists case
+            return null;
+        }
+
+        var result = context.Set<User>().Add(new User
+        {
+            Email = request.Email!,
+            Name = request.Username!,
+            Password = request.Password!,
+            CreatedAt = DateTimeOffset.UtcNow
+        });
         await context.SaveChangesAsync(ct);
-        return user;
+        return result.Entity;
     }
 
     public async Task<User> UpdateAsync(User user, CancellationToken ct = default)
