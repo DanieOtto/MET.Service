@@ -3,32 +3,34 @@ using MET.Service.Application.Interfaces;
 using MET.Service.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace MET.Service.Controllers;
 
 [ApiController]
+[EnableRateLimiting("fixed")]
 [Route("api/[controller]")]
 public class AuthController(ITokenService _tokenService, IUserService _userService) : ControllerBase
 {
     [AllowAnonymous]
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<ActionResult<LoginRequest>> Login([FromBody] LoginRequest request)
     {
         if (!String.IsNullOrEmpty(request.Username) && !String.IsNullOrEmpty(request.Password))
         {
-            var user = await _userService.GetAsync(request.Id);
+            //var user = await _userService.ListAsync();
 
-            if (user != null)
-            {
-                var result = _tokenService.Create(request);
-                return Ok(new { result });
-            }
+            //if (user != null)
+            //{
+            //    var result = _tokenService.Create(request);
+            //    return Ok(new { result });
+            //}
         }
         return Unauthorized();
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+    public async Task<ActionResult> Register([FromBody] RegisterRequestDto request)
     {
         if (String.IsNullOrEmpty(request.Username) || String.IsNullOrEmpty(request.Password))
         {

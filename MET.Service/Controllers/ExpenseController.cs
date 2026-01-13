@@ -4,6 +4,7 @@ using MET.Service.Application.Interfaces;
 using MET.Service.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace MET.Service.Controllers;
 
@@ -41,7 +42,7 @@ public class ExpenseController(IExpenseService service) : ControllerBase
 
     // UPDATE /api/expenses
     [HttpPatch]
-    public async Task<Expense> UpdateAsync(Expense expense, CancellationToken ct = default)
+    public async Task<ActionResult<Expense>> UpdateAsync(Expense expense, CancellationToken ct = default)
     {
             var result = await service.UpdateAsync(expense, ct);
             return result;
@@ -57,7 +58,7 @@ public class ExpenseController(IExpenseService service) : ControllerBase
         
     // DELETE /api/expenses/{id}
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken ct = default)
+    public async Task<ActionResult> DeleteAsync(Guid id, CancellationToken ct = default)
     {
             await service.DeleteAsync(id, ct);
             return NoContent();

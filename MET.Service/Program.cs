@@ -1,13 +1,13 @@
-using System.Text;
 using MET.Service.Application.Interfaces;
 using MET.Service.Application.Services;
 using MET.Service.Infrastructure.Data;
+using MET.Service.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using MET.Service.Infrastructure.Services;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.OpenApi;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,43 +50,25 @@ builder.Services.AddAuthorization();
 
 // Add Swashbuckle swagger services
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen(c =>
-//{
-//    c.SwaggerDoc("v1", new OpenApiInfo { Title = "MET API", Version = "v1" });
-
-//    // Define the BearerAuth scheme for the UI
-//    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-//    {
-//        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer {token}' or just the token.", 
-//        Name = "Authorization",
-//        In = ParameterLocation.Header,
-//        Type = SecuritySchemeType.Http,
-//        Scheme = "bearer",
-//        BearerFormat = "JWT"
-//    });
-
-//    // Require the Bearer scheme for all operations so the UI will send the header
-//    //c.AddSecurityRequirement(new OpenApiSecurityRequirement
-//    //{
-//    //    {
-//    //        new OpenApiSecurityScheme
-//    //        {
-//    //            Description = "",
-//    //            Reference = new OpenApiReference
-//    //            {
-//    //                Type = ReferenceType.SecurityScheme,
-//    //                Id = "Bearer"
-//    //            }
-//    //        },
-//    //        new string[] { }
-//    //    }
-//    //});
-//});
+builder.Services.AddSwaggerGen();
 
 // Add application services
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+// Configure rate limiting
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    options.AddFixedWindowLimiter("fixed", opt =>
+    {
+        opt.PermitLimit = 20;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueLimit = 0;
+    });
+});
 
 // Add database context
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -104,15 +86,17 @@ builder.Services.AddControllers();
 // Configure Middlewares
 var app = builder.Build();
 
+app.UseRateLimiter();
+
 // Enable Swagger UI
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI(options =>
-//    {
-//        options.SwaggerEndpoint("/swagger/v1/swagger.json", "MET API V1");
-//    });
-//}
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "MET API V1");
+    });
+}
 
 app.UseAuthentication();
 app.UseAuthorization();

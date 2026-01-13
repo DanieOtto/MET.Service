@@ -32,7 +32,7 @@ public class UsersController(IUserService service) : ControllerBase
     
         // UPDATE /api/users
         [HttpPatch]
-        public async Task<User> UpdateAsync(User user, CancellationToken ct = default)
+        public async Task<ActionResult<User>> UpdateAsync(User user, CancellationToken ct = default)
         {
                 var result = await service.UpdateAsync(user, ct);
                 return result;
@@ -40,7 +40,7 @@ public class UsersController(IUserService service) : ControllerBase
 
         // DELETE /api/users/{id}
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken ct = default)
+        public async Task<ActionResult> DeleteAsync(Guid id, CancellationToken ct = default)
         {
                 await service.DeleteAsync(id, ct);
                 return NoContent();
