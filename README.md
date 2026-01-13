@@ -1,11 +1,6 @@
 # MET Expense Tracker
 
-A minimal **ASP.NET Core** (`net9.0`) service for tracking expenses. It uses **EF Core** with **Azure SQL Server**, follows async conventions, and exposes CRUD endpoints for `Expense` entities.
-
-## Features
-
-- **ASP.NET Core Clean Architecture**
-- **EF Core** with Azure SQL Server provider
+A minimal **ASP.NET Core** (`net10.0`) service for tracking expenses. It uses **EF Core** with **Azure SQL Server**, follows async conventions, and exposes CRUD endpoints for `Expense` entities.
 
 ## Tech Stack
 
