@@ -5,7 +5,7 @@ using MET.Service.Application.Interfaces;
 using MET.Service.Application.DTOs;
 using Microsoft.IdentityModel.Tokens;
 
-namespace MET.Service.Infrastructure.Services;
+namespace MET.Service.Application.Services;
 
 public sealed class TokenService(IConfiguration config) : ITokenService
 {

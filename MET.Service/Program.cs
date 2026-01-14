@@ -1,7 +1,6 @@
 using MET.Service.Application.Interfaces;
 using MET.Service.Application.Services;
 using MET.Service.Infrastructure.Data;
-using MET.Service.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;

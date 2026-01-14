@@ -25,7 +25,7 @@ public class UsersController(IUserService service) : ControllerBase
         [HttpGet]
         public async Task<ActionResult<PagedList<User>>> List([FromQuery] UserQuery query, CancellationToken ct = default)
         {
-                var items = await service.ListAsync(query.Skip, query.Take, ct);
+                var items = await service.ListAsync(null, null, query.Skip, query.Take, ct);
                 var total = items.Count;
                 return Ok(new PagedList<User>(items, query.PageNumber, query.PageSize, total));
         }
