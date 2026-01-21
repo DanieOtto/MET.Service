@@ -7,14 +7,12 @@ namespace MET.Service.Application.DTOs
         public Guid? Id { get; set; }
         public string? Username { get; set; }
         [Required]
-        [MinLength(8)] 
+        [MinLength(8)]
         public string? Password { get; set; }
         public string? Firstname { get; set; }
         public string? Lastname { get; set; }
         [Required]
         [EmailAddress] 
         public string? Email { get; set; }
-        public required string[] Roles { get; set; }
-        public required string[] Scopes { get; set; }
     }
 }

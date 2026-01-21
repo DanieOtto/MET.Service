@@ -3,10 +3,12 @@ using MET.Service.Application.Services;
 using MET.Service.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
+using MET.Service.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,11 +49,18 @@ builder.Services.AddAuthentication(options =>
 // Add authorization services
 builder.Services.AddAuthorization();
 
+builder.Services.Configure<PasswordHasherOptions>(options =>
+{
+    // Sets the iteration count (default is 100,000 in Identity V3)
+    options.IterationCount = 200000;
+});
+
 // Add Swashbuckle swagger services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add application services
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();

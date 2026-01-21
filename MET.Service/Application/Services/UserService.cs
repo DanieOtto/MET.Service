@@ -49,7 +49,7 @@ public class UserService(AppDbContext _context, IPasswordHasher<User> _passwordH
 
         if (user is null)
         {
-            throw new KeyNotFoundException($"User with email {email} not found.");
+            return null;
         }
 
         // Verify the password

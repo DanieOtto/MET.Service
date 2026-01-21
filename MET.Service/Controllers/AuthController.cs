@@ -21,7 +21,7 @@ public class AuthController(ITokenService _tokenService, IUserService _userServi
 
             if (user != null)
             {
-                var result = _tokenService.Create(request);
+                var result = _tokenService.Create(user);
                 return Ok(new { result });
             }
         }
@@ -36,18 +36,16 @@ public class AuthController(ITokenService _tokenService, IUserService _userServi
             return BadRequest();
         }
 
-        var result = await _userService.RegisterUserAsync(request);
-
-        if (result != null)
+        if (request.Password.Length < 8)
         {
-            var token = _tokenService.Create(new LoginRequest 
-            { 
-                Id = result.Id,
-                Password = request.Password!,
-                Roles = request.Roles,
-                Scopes = request.Scopes,
-                Username = request.Username!
-            });
+            return BadRequest("Password must be at least 8 characters long.");
+        }
+
+        var user = await _userService.RegisterUserAsync(request);
+
+        if (user != null)
+        {
+            var token = _tokenService.Create(user);
             return Ok(new { token });
         }
 
