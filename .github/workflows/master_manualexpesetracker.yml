@@ -44,7 +44,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
+
+      - name: Install EF Core tools
+        run: dotnet tool install --global dotnet-ef
       
+      - name: Update database
+        run: dotnet ef database update --project ./ManualExpeseTracker/ManualExpeseTracker.csproj --connection "${{ secrets.AZURE_SQL_CONNECTION_STRING }}"
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3

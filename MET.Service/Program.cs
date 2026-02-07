@@ -1,14 +1,16 @@
+using Azure.Identity;
 using MET.Service.Application.Interfaces;
 using MET.Service.Application.Services;
+using MET.Service.Domain.Entities;
 using MET.Service.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
-using MET.Service.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
