@@ -49,7 +49,7 @@ jobs:
         run: dotnet tool install --global dotnet-ef
       
       - name: Update database
-        run: dotnet ef database update --project ./MET.Service/MET.Service.csproj --connection "${{ secrets.AZURE_SQL_CONNECTION_STRING }}"
+        run: dotnet ef database update --connection "${{ secrets.AZURE_SQL_CONNECTION_STRING }}"
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -60,3 +60,4 @@ jobs:
           package: .
 
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B02A48D2FF884E3283793D65D651848A }}
+
