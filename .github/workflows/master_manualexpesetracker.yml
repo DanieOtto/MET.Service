@@ -58,4 +58,6 @@ jobs:
           app-name: 'ManualExpeseTracker'
           slot-name: 'Production'
           package: .
+
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B02A48D2FF884E3283793D65D651848A }}
+
