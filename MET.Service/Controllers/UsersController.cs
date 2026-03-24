@@ -16,33 +16,33 @@ public class UsersController(IUserService service) : ControllerBase
         [HttpGet($"{{id:guid}}", Name = "GetUserById")]
         public async Task<ActionResult<UserDto>> Get([FromRoute]Guid id, CancellationToken ct = default)
         {
-                var user = await service.GetAsync(id, ct);
-                if (user is null) return NotFound();
-                return Ok(user);
+            var user = await service.GetAsync(id, ct);
+            if (user is null) return NotFound();
+            return Ok(user);
         }
 
         // GET /api/users
         [HttpGet]
         public async Task<ActionResult<PagedList<User>>> List([FromQuery] UserQuery query, CancellationToken ct = default)
         {
-                var items = await service.ListAsync(null, null, query.Skip, query.Take, ct);
-                var total = items.Count;
-                return Ok(new PagedList<User>(items, query.PageNumber, query.PageSize, total));
+            var items = await service.ListAsync(null, null, query.Skip, query.Take, ct);
+            var total = items.Count;
+            return Ok(new PagedList<User>(items, query.PageNumber, query.PageSize, total));
         }
     
         // UPDATE /api/users
         [HttpPatch]
         public async Task<ActionResult<User>> UpdateAsync(User user, CancellationToken ct = default)
         {
-                var result = await service.UpdateAsync(user, ct);
-                return result;
+            var result = await service.UpdateAsync(user, ct);
+            return result;
         }
 
         // DELETE /api/users/{id}
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeleteAsync(Guid id, CancellationToken ct = default)
         {
-                await service.DeleteAsync(id, ct);
-                return NoContent();
+            await service.DeleteAsync(id, ct);
+            return NoContent();
         }
 }
