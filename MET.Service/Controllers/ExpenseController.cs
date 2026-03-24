@@ -11,7 +11,7 @@ namespace MET.Service.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class ExpenseController(IExpenseService service) : ControllerBase
+public class ExpensesController(IExpenseService service) : ControllerBase
 {
     // GET /api/expenses/{id}
     [HttpGet($"{{id:guid}}", Name = "GetExpenseById")]
